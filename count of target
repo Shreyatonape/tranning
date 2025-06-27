@@ -1,0 +1,33 @@
+package Algorithms;
+public class Programs<T>
+{
+	T[] arr;
+	
+	Programs(T[]arr)
+	{
+		this.arr=arr;
+	}
+	int Programs(T target)
+	{
+		int c=0;
+		for(T a  :arr)
+		{
+			if(a.equals(target))c++;
+		}
+		
+		return c;
+	}
+	
+	
+	
+	public static void main(String[] args)
+	{
+		
+		Integer[] a1= {1,2,4,3,2};
+		Programs<Integer> i= new Programs<>(a1);
+		System.out.println("count of 2 is:"+i.Programs(2));
+	}
+
+}
+
+	
