@@ -1,0 +1,53 @@
+package Pa1;
+
+public class Program {
+
+	public static void main(String[] args) {
+		
+		 BankAccount_UserOperation myAccount = new BankAccount_UserOperation(1000);
+
+	        // Lambda-based Runnables
+	        Runnable depositTask = () -> myAccount.deposit(500);
+	        Runnable withdrawTask = () -> myAccount.withdraw(700);
+	        Runnable checkBalanceTask = () -> myAccount.checkBalance();
+
+	        // Threads using lambda Runnables
+	        Thread t1 = new Thread(depositTask, "Deposit-Thread");
+	        Thread t2 = new Thread(withdrawTask, "Withdraw-Thread");
+	        Thread t3 = new Thread(checkBalanceTask, "CheckBalance-Thread");
+
+	        // Start threads
+	        t1.start();
+	        t2.start();
+	        t3.start();
+	}
+
+}
+
+class BankAccount_UserOperation {
+    private double balance;
+
+    public BankAccount_UserOperation(double initBalance) {
+        this.balance = initBalance;
+    }
+
+    public synchronized void deposit(double amount) {
+        System.out.println(Thread.currentThread().getName() + " Depositing amount: " + amount);
+        this.balance += amount;
+        System.out.println("Updated balance after deposit: " + this.balance);
+    }
+
+    public synchronized void withdraw(double amount) {
+        if (amount > this.balance) {
+            System.out.println(Thread.currentThread().getName() + " Insufficient Balance...transaction failed");
+        } else {
+            System.out.println(Thread.currentThread().getName() + " Withdrawing Amount: " + amount);
+            this.balance -= amount;
+            System.out.println("Updated balance after withdraw: " + this.balance);
+        }
+    }
+
+    public synchronized void checkBalance() {
+        System.out.println(Thread.currentThread().getName() + " - Current Balance: " + this.balance);
+    }
+}
