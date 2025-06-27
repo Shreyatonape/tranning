@@ -1,0 +1,22 @@
+package javaIO;
+
+public class algo2
+{
+	public static <T> void revString(String str)
+	{
+		System.out.println("befor reverse:"+str);
+		for(int i=str.length()-1;i>=0;i--)
+		{
+			System.out.print(str.charAt(i));
+		}
+	}
+
+	
+
+	public static void main(String[] args) 
+	{
+		algo2.revString("HELLO");
+
+	}
+
+}
