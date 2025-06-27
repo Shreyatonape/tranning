@@ -1,0 +1,21 @@
+package Algorithms;
+import java.util.Arrays;
+
+public class Generic<T> {
+    T values;
+
+    void set(T values) {
+        this.values = values;
+    }
+
+    T get() {
+        return values;
+    }
+
+    public static void main(String[] args) {
+        Integer[] T = {17, 15, 25, 70};
+        Arrays.sort(T);
+        System.out.println("Minimum value is: " + T[0]);
+        System.out.println("Maximum value is: " + T[T.length - 1]);
+    }
+}
