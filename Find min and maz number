@@ -1,0 +1,26 @@
+package Practice;
+import java.util.Arrays;
+public class C<T>
+{
+	private T[] arr;
+	
+    public C(T[] arr)
+    {
+    	this.arr=arr;
+    }
+    
+    public void find()
+    {
+    	System.out.println("Min value is:"+arr[0]);
+    	System.out.println("Max value is:"+arr[arr.length-1]);
+    }
+
+	public static void main(String[] args) 
+	{
+		Integer[] intarr= {20,55,35,100,74};
+		Arrays.sort(intarr);
+		C<Integer> carr= new C<>(intarr);
+        carr.find();
+	}
+
+}
