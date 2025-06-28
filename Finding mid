@@ -1,0 +1,28 @@
+package Practice;
+
+public class E<T>
+{
+	private T[] arr;
+	
+	public E(T[] arr)
+	{
+		this.arr=arr;
+	}
+	
+	public void find()
+	{
+		int mid;
+		System.out.println("Length of array is:"+arr.length);
+		mid=arr.length/2;
+		System.out.println("Middle element is:"+arr[mid]);
+	}
+
+	public static void main(String[] args)
+	{
+       Integer[] iarr= {1,2,3,4,5,6};
+       E<Integer> intarr= new E<>(iarr);
+       intarr.find();
+
+	}
+
+}
