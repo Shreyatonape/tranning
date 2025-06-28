@@ -1,0 +1,42 @@
+package Practice;
+
+public class A <T>
+{
+	
+	private T[] arr;
+	private T target;
+	
+	
+	public A(T[] arr, T target)
+	{
+		this.arr=arr;
+		this.target=target;
+	}
+  
+	public void count()
+	{
+		int count=0;
+		System.out.println("Target value is:"+target);
+		
+		for(int i=0;i<arr.length;i++)
+		{
+			if(arr[i]==target)
+			{
+				System.out.println(i);
+				count++;
+			}
+		}
+		System.out.println("Count of" + target+ "is:"+count);
+	}
+	public static void main(String[] args)
+	{
+		Integer [] arr1= {1,2,3,2,4,2,2,6};
+		A<Integer> intarr= new A<>(arr1,2);
+		intarr.count();
+
+		String [] sarr= {"A","B","A","A","c"};
+		A<String> strarr = new A<>(sarr,"A");
+		strarr.count();
+	}
+
+}
