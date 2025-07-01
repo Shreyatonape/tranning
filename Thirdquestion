@@ -1,0 +1,43 @@
+package CollectionFramework;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+
+public class DateManipulator
+{
+	void date()
+	{
+		 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+	       
+	        String ds = "2007-04-18";
+	        
+	        LocalDate date = LocalDate.parse(ds, formatter);
+	        System.out.println("After converting into date: " + date);
+
+	     
+	        String std = date.format(formatter);
+	        System.out.println("After converted into string: " + std);
+	
+	// Logic for find days between two dates
+	        
+		 LocalDate sd = LocalDate.of(2025, 04, 1);
+	        LocalDate ed = LocalDate.of(2025, 04, 18);
+
+	     
+	        long daysBetween = ChronoUnit.DAYS.between(sd, ed);
+
+	       
+	        System.out.println("Days between two dates: " + daysBetween);
+	
+}
+   
+	public static void main(String[] args) 
+	{
+		 DateManipulator dm = new DateManipulator();
+		 dm.date();
+	
+	}
+
+}
