@@ -1,0 +1,56 @@
+package CollectionFramework;
+
+import java.io.BufferedReader;
+import java.io.PrintWriter;
+import java.io.InputStreamReader;
+import java.time.LocalDateTime;
+import java.io.IOException;
+import java.io.FileWriter;
+import java.time.format.DateTimeFormatter;
+
+public class Assignment1
+{
+	void show()
+	{
+        try 
+        
+        { 
+		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+		PrintWriter writer = new PrintWriter(new FileWriter("user_input_log.txt",true));
+		
+		
+		String inputLine;
+		
+		while((inputLine = reader.readLine()) != null)
+		{
+			if("exit".equalsIgnoreCase(inputLine.trim()))
+			{
+				break;
+	        }
+			
+			String time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("2025-07-31 9:30:44"));
+		
+			
+			writer.println("["+time+"]" + inputLine);
+			writer.flush();
+			
+			
+		}
+		reader.close();
+		writer.close();
+		
+	    }
+        catch(IOException e)
+        {
+        	System.out.println("An error occured :"+e.getMessage());
+        }
+	}
+
+	public static void main(String[] args)
+	{
+        Assignment1 a= new Assignment1();
+        a.show();
+
+	}
+
+}
