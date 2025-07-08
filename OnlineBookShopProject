@@ -1,0 +1,149 @@
+import java.sql.*;
+import java.util.Scanner;
+
+public class OnlineBookShop {
+    // Database connection details
+    static final String URL = "jdbc:postgresql://localhost:5432/bookshopdb";
+    static final String USER = "your_username";       // 🔁 Replace with your DB username
+    static final String PASSWORD = "your_password";   // 🔁 Replace with your DB password
+
+    static Connection conn;
+    static Scanner scanner = new Scanner(System.in);
+
+    public static void main(String[] args) {
+        try {
+            Class.forName("org.postgresql.Driver");
+            conn = DriverManager.getConnection(URL, USER, PASSWORD);
+            System.out.println("✅ Connected to PostgreSQL");
+
+            // Step 1: Create tables if not exist
+            createTables();
+
+            // Step 2: Insert default user if not exists
+            insertDefaultUser();
+
+            // Step 3: Login and show menu
+            if (login()) {
+                showMenu();
+            } else {
+                System.out.println("❌ Login failed. Exiting...");
+            }
+
+            conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    static void createTables() {
+        try (Statement stmt = conn.createStatement()) {
+            String createUsersTable = "CREATE TABLE IF NOT EXISTS users (" +
+                    "username VARCHAR(50) PRIMARY KEY," +
+                    "password VARCHAR(50) NOT NULL)";
+            stmt.executeUpdate(createUsersTable);
+
+            String createBooksTable = "CREATE TABLE IF NOT EXISTS books (" +
+                    "id SERIAL PRIMARY KEY," +
+                    "title VARCHAR(100)," +
+                    "author VARCHAR(100)," +
+                    "price NUMERIC(8,2))";
+            stmt.executeUpdate(createBooksTable);
+
+            System.out.println("✅ Tables checked/created.");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    static void insertDefaultUser() {
+        try {
+            String checkUser = "SELECT * FROM users WHERE username = 'admin'";
+            ResultSet rs = conn.createStatement().executeQuery(checkUser);
+
+            if (!rs.next()) {
+                String insertUser = "INSERT INTO users (username, password) VALUES ('admin', 'admin123')";
+                conn.createStatement().executeUpdate(insertUser);
+                System.out.println("✅ Default user 'admin' added.");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    static boolean login() {
+        System.out.print("Username: ");
+        String uname = scanner.nextLine();
+        System.out.print("Password: ");
+        String pass = scanner.nextLine();
+
+        try {
+            PreparedStatement stmt = conn.prepareStatement(
+                "SELECT * FROM users WHERE username = ? AND password = ?");
+            stmt.setString(1, uname);
+            stmt.setString(2, pass);
+            ResultSet rs = stmt.executeQuery();
+            return rs.next(); // true if match found
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    static void showMenu() {
+        while (true) {
+            System.out.println("\n📚 Online Bookshop Menu:");
+            System.out.println("1. Add Book");
+            System.out.println("2. View All Books");
+            System.out.println("3. Exit");
+            System.out.print("Choose option: ");
+            int choice = Integer.parseInt(scanner.nextLine());
+
+            switch (choice) {
+                case 1: addBook(); break;
+                case 2: viewBooks(); break;
+                case 3:
+                    System.out.println("👋 Exiting...");
+                    return;
+                default:
+                    System.out.println("❌ Invalid choice!");
+            }
+        }
+    }
+
+    static void addBook() {
+        try {
+            System.out.print("Enter book title: ");
+            String title = scanner.nextLine();
+            System.out.print("Enter author: ");
+            String author = scanner.nextLine();
+            System.out.print("Enter price: ");
+            double price = Double.parseDouble(scanner.nextLine());
+
+            PreparedStatement stmt = conn.prepareStatement(
+                "INSERT INTO books (title, author, price) VALUES (?, ?, ?)");
+            stmt.setString(1, title);
+            stmt.setString(2, author);
+            stmt.setDouble(3, price);
+            int rows = stmt.executeUpdate();
+
+            System.out.println(rows > 0 ? "✅ Book added!" : "❌ Failed to add book.");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    static void viewBooks() {
+        try {
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM books");
+
+            System.out.println("\n📖 Books in Store:");
+            while (rs.next()) {
+                System.out.printf("ID: %d | Title: %s | Author: %s | Price: ₹%.2f%n",
+                    rs.getInt("id"), rs.getString("title"), rs.getString("author"), rs.getDouble("price"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+}
